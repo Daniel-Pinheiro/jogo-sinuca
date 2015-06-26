@@ -1,6 +1,4 @@
 # -*- coding: utf8 -*-
-import sys
-sys.path.append ('/home/lucas/workspace/FGAme/src/')
 from FGAme import *
 from random import uniform, randint
 
