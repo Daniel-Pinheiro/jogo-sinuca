@@ -1,5 +1,6 @@
 # -*- coding: utf8 -*-
-
+import sys
+sys.path.append ('/home/lucas/workspace/FGAme/src/')
 from FGAme import *
 from random import uniform, randint
 
@@ -10,11 +11,8 @@ class Mesa(World):
 
     def __init__(self,
                  gravity=0, friction=0.5, restitution=0.95,
-                 num_balls=16, speed=200, radius=10,
+                 num_balls=1, speed=200, radius=10,
                  color='random'):
-        '''Cria uma simulação de um gás de partículas confinado por um êmbolo
-        com `num_balls` esferas de raio `radius` com velocidades no intervalo
-        de +/-`speed`.'''
 
         super(Mesa, self).__init__(gravity=gravity, dfriction=friction,
                                   restitution=restitution)
@@ -35,19 +33,23 @@ class Mesa(World):
         AABB(0, 800, 0, 100, world=self, mass='inf')     # Baixo
 
         # Inicia bolas
-        self.bolas = []
-        for _ in range(num_balls):
-            pos = Vec2(uniform(50, 750), uniform(150, 450))
-            vel = Vec2(uniform(-speed, speed), uniform(-speed, speed))
+        # Posição das bolas
+        posX = 200
+        posY = 297.5
+        pos_bolas = [(posX,posY), (posX-20,posY-10), (posX-20,posY+10), (posX-40, posY-20), 
+                    (posX-40, posY), (posX-40, posY+20), (posX-60, posY-30), (posX-60, posY-10),
+                    (posX-60,posY+10), (posX-60, posY+30), (posX-80, posY-40), (posX-80, posY-20),
+                    (posX-80, posY), (posX-80, posY+20), (posX-80, posY+40)]
+        for pos in pos_bolas:
+            vel = (0, 0)
             bola = Circle(radius=radius, vel=vel, pos=pos, mass=1)
             bola.color = self.get_color(color)
-            #self.bolas.append(bola)
             self.add(bola)
     
         pos = Vec2(uniform(50, 750), uniform(150, 450))
         bolao = Circle(radius=1.5*radius, vel=Vec2(0, 0), pos=pos, mass=2)
-        bolao.color = (245, 245, 245)
-        self.add(bolao)
+        bolao.color = (0, 0, 0)
+        #self.add(bolao)
 
     def get_color(self, color):
         if color == 'random':
