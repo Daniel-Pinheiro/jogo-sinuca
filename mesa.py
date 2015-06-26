@@ -19,7 +19,7 @@ class Mesa(World):
 
         
         # Buracos da mesa
-        pos_buracos = [(30, 495), (770, 495), (30, 100), (770, 100)]
+        pos_buracos = [(30, 495), (770, 495), (400, 495), (400, 100),(30, 100), (770, 100)]
 
         for pos in pos_buracos:
             buraco = Circle(radius=20, vel=Vec2(0, 0), pos=Vec2(pos), mass='inf')
