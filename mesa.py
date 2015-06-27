@@ -2,6 +2,8 @@
 from FGAme import *
 from random import uniform, randint
 
+import taco
+
 # Inicializa o mundo
 
 
@@ -58,7 +60,7 @@ class Mesa(World):
         pos = Vec2(uniform(50, 750), uniform(150, 450))
         bolao = Circle(radius=1.5*radius, vel=Vec2(0, 0), pos=pos, mass=2)
         bolao.color = (0, 0, 0)
-        #self.add(bolao)
+        self.add(bolao)
 
     @listen('key-down', 'space')
     def toggle_pause(self):
