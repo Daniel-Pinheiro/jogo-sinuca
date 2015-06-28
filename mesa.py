@@ -67,12 +67,12 @@ class Mesa(World):
         self.bolao.color = (0, 0, 0)
         self.add(self.bolao)
 
-    @listen('key-down', 'space')
+    @listen('key-down', 'return')
     def toggle_pause(self):
         super(Mesa, self).toggle_pause()
 
     # Teste de tacada
-    @listen('key-down', 'up',-200 )
+    @listen('key-down', 'space', -200 )
     def tacada(self, impulso):
         direcao = Vec2(1,0)
         self.bolao.boost(direcao*impulso)
