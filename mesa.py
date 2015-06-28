@@ -4,16 +4,21 @@ from random import uniform, randint
 
 import taco, buraco
 
-# Inicializa a mesa com as bolas
 
+gravity=0
+friction=0.5
+restitution=0.95
+num_balls=15
+speed=200
+radius=10
+color='all'
+
+
+# Inicializa a mesa com as bolas
 
 class Mesa(World):
 
-    def __init__(self,
-                 gravity=0, friction=0.5, restitution=0.95,
-                 num_balls=15, speed=200, radius=10,
-                 color='random'):
-
+    def __init__(self):
         super(Mesa, self).__init__(gravity=gravity, dfriction=friction,
                                   restitution=restitution, background = (0,146,64))
 
