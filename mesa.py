@@ -57,14 +57,20 @@ class Mesa(World):
             self.add(bola)
 
         # Define bola branca
-        pos = Vec2(uniform(50, 750), uniform(150, 450))
-        bolao = Circle(radius=1.5*radius, vel=Vec2(0, 0), pos=pos, mass=2)
-        bolao.color = (0, 0, 0)
-        self.add(bolao)
+        pos = Vec2(600, 100 + 395/2)
+        self.bolao = Circle(radius=1.5*radius, vel=Vec2(0, 0), pos=pos, mass=2)
+        self.bolao.color = (0, 0, 0)
+        self.add(self.bolao)
 
     @listen('key-down', 'space')
     def toggle_pause(self):
         super(Mesa, self).toggle_pause()
+
+    # Teste de tacada
+    @listen('key-down', 'up',-200 )
+    def tacada(self, impulso):
+        direcao = Vec2(1,0)
+        self.bolao.boost(direcao*impulso)
 
 # Inicia o jogo
 if __name__ == '__main__':
