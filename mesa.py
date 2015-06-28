@@ -27,18 +27,15 @@ class Mesa(World):
         pos_buracos = [(30, 495), (770, 495), (400, 495), (400, 100),(30, 100), (770, 100)]
 
         for pos in pos_buracos:
-            buraco = Circle(radius=25, vel=Vec2(0, 0), pos=Vec2(pos), mass='inf')
-            self.centroBuraco = Circle(radius=10, pos=pos, mass='inf', color='blue', col_layer=1)
-            self.centroBuraco.listen('collision', self.bola_no_buraco)
-            self.add(self.centroBuraco)
+            buraco = Circle(radius=20, vel=Vec2(0, 0), pos=Vec2(pos), mass='inf')
             self.add(buraco)
         
         # Limites da mesa (740 x 395)
         #   xi, xf, yi, yf 
-        AABB(0, 800, 495, 800, world=self, mass='inf', col_layer=1)  # Cima
-        AABB(0, 30, 30, 800, world=self, mass='inf', col_layer=1)   # Esquerda
-        AABB(770, 800, 30, 800, world=self, mass='inf', col_layer=1) # Direita
-        AABB(0, 800, 0, 100, world=self, mass='inf', col_layer=1)     # Baixo
+        AABB(0, 800, 495, 800, world=self, mass='inf')  # Cima
+        AABB(0, 30, 30, 800, world=self, mass='inf')   # Esquerda
+        AABB(770, 800, 30, 800, world=self, mass='inf') # Direita
+        AABB(0, 800, 0, 100, world=self, mass='inf')     # Baixo
 
         # Inicia bolas
       
@@ -56,28 +53,21 @@ class Mesa(World):
         # Na ordem: amarela, azul, vermelha, violeta, rosa, verde, bege, preta, 
         #           amarela, azul, vermelha, verde, rosa, violeta, bege
         
-        #Cria as bolas e as associa com as posições e as cores:
+        #Associa as bolas com as posições e as cores:
 
         for x in range (num_balls):
-            bola = Circle(radius=radius, mass=1, col_layer=1)
+            bola = Circle(radius=radius, mass=1)
             bola.pos = pos_bolas[x]
             bola.color = cor_bolas[x]
             bola.numero = x
             self.add(bola)
 
         # Define bola branca
-        pos = (600, 100 + 395/2)
-        self.bolao = Circle(radius=1.5*radius, vel=(150, 157), pos=pos, mass=2, col_layer=1)
-        self.bolao.color = (255,255,255)
+        pos = Vec2(600, 100 + 395/2)
+        self.bolao = Circle(radius=1.5*radius, vel=Vec2(0, 0), pos=pos, mass=2)
+        self.bolao.color = (0, 0, 0)
         self.add(self.bolao)
 
-
-
-    @listen('collision')
-    def bola_no_buraco(self, col):
-        self.remove(col.objects[1])
-        print(col.objects)
-        
     @listen('key-down', 'return')
     def toggle_pause(self):
         super(Mesa, self).toggle_pause()
@@ -87,8 +77,6 @@ class Mesa(World):
     def tacada(self, impulso):
         direcao = Vec2(1,0)
         self.bolao.boost(direcao*impulso)
-
-    
 
 # Inicia o jogo
 if __name__ == '__main__':
