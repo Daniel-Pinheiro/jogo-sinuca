@@ -1,7 +1,6 @@
 # -*- coding: utf8 -*-
 from FGAme import *
 from random import uniform, randint
-
 import taco
 
 # Inicializa o mundo
@@ -9,28 +8,24 @@ import taco
 
 class Mesa(World):
 
-    def __init__(self,
-                 gravity=0, friction=0.5, restitution=0.95,
-                 num_balls=15, speed=200, radius=10,
-                 color='random'):
+    def __init__(self, gravity=0, restitution=1, num_balls=0, radius=10):
 
-        super(Mesa, self).__init__(gravity=gravity, dfriction=friction,
-                                  restitution=restitution, background = (0,146,64))
+        super(Mesa, self).__init__(gravity=gravity, restitution=restitution, background = (0,146,64))
 
         
         # Buracos da mesa
         pos_buracos = [(30, 495), (770, 495), (400, 495), (400, 100),(30, 100), (770, 100)]
 
         for pos in pos_buracos:
-            buraco = Circle(radius=20, vel=Vec2(0, 0), pos=Vec2(pos), mass='inf')
+            buraco = Circle(radius=20, vel=Vec2(0, 0), pos=Vec2(pos), mass='inf', col_group=1)
             self.add(buraco)
         
         # Limites da mesa (740 x 395)
         #   xi, xf, yi, yf 
-        AABB(0, 800, 495, 800, world=self, mass='inf')  # Cima
-        AABB(0, 30, 30, 800, world=self, mass='inf')   # Esquerda
-        AABB(770, 800, 30, 800, world=self, mass='inf') # Direita
-        AABB(0, 800, 0, 100, world=self, mass='inf')     # Baixo
+        AABB(0, 800, 495, 800, world=self, mass='inf', color='red')  # Cima
+        AABB(0, 30, 30, 800, world=self, mass='inf', color='blue')   # Esquerda
+        AABB(770, 800, 30, 800, world=self, mass='inf', color='blue') # Direita
+        AABB(0, 800, 0, 100, world=self, mass='inf', color='red')     # Baixo
 
         # Inicia bolas
       
@@ -51,20 +46,36 @@ class Mesa(World):
         #Associa as bolas com as posições e as cores:
 
         for x in range (num_balls):
-            bola = Circle(radius=radius, mass=1)
+            bola = Circle(radius=radius, mass=1, col_group=1)
             bola.pos = pos_bolas[x]
             bola.color = cor_bolas[x]
             self.add(bola)
 
         # Define bola branca
-        pos = Vec2(uniform(50, 750), uniform(150, 450))
-        bolao = Circle(radius=1.5*radius, vel=Vec2(0, 0), pos=pos, mass=2)
-        bolao.color = (0, 0, 0)
-        self.add(bolao)
+        #pos = (400,297.5) #posição teste meio 
+        #vel = (-200, 0)
+        pos = (90, 435)
+        vel = Vec2(-100,100)
+        self.bolao = Circle(radius=1.5*radius, vel=Vec2(0, 0), pos=pos, mass=2, col_group=1)
+        self.bolao.color = (255, 255, 255)
+        self.bolao.vel = vel
+        #self.bolao.listen('collision', self.print_vel)
+        self.add(self.bolao)
+
+        
+
+    @listen('collision')
+    def print_vel(self, col):
+        other = col.other(self.bolao)
+        if (other == self.up):
+            self.up.color = 'red'
+        else:
+            self.left.color = 'blue'
+
 
     @listen('key-down', 'space')
     def toggle_pause(self):
-        super(Mesa, self).toggle_pause()
+        super(Mesa, self).toggle_pause()  
 
 # Inicia o jogo
 if __name__ == '__main__':
