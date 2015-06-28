@@ -59,6 +59,7 @@ class Mesa(World):
             bola = Circle(radius=radius, mass=1)
             bola.pos = pos_bolas[x]
             bola.color = cor_bolas[x]
+            bola.numero = x
             self.add(bola)
 
         # Define bola branca
