@@ -2,9 +2,9 @@
 from FGAme import *
 from random import uniform, randint
 
-import taco
+import taco, buraco
 
-# Inicializa o mundo
+# Inicializa a mesa com as bolas
 
 
 class Mesa(World):
