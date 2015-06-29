@@ -26,10 +26,10 @@ class Mesa(World):
         pos_buracos = [(30, 495), (770, 495), (400, 495), (400, 100),(30, 100), (770, 100)]
         self.listaBuracos = []
 
-        self.buracos = [Circle(radius=25, vel=Vec2(0, 0), pos=Vec2(pos), mass='inf',color=(30,30,30), col_layer=2,**self)
-                        for pos in pos_buracos]
-
         for pos in pos_buracos:
+            buraco = Circle(radius=25, vel=Vec2(0, 0), pos=Vec2(pos), mass='inf',color=(30,30,30), col_layer=2)
+            self.add(buraco)
+            
             centroBuraco = Circle(radius=10, pos=pos, mass='inf', color='blue')
             self.listaBuracos.append(centroBuraco)
             self.add(centroBuraco)
