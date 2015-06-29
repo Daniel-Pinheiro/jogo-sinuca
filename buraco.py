@@ -13,3 +13,15 @@ class Buraco(Circle):
 
     def __init__(self, pos=Vec2(0,0)):
         pass
+
+
+
+    def verifica_paridade_bola(self, bola):
+        if bola.numero == 0:
+            return 'branca'
+        elif bola.numero == 1:
+            return 'um'
+        elif (bola.numero % 2) == 0:
+            return 'par'
+        else:
+            return 'impar'
