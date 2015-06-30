@@ -120,8 +120,25 @@ class Mesa(World):
         y_axis = 600 - self.bolao.pos[1] #a pygame usa um sistema cartesiano com y invertido. Isso adapta ao nosso.
         y_axis2 = 600 - self.mouseY #idem acima
         x_axis = self.mouseX
+
+        #define tamanho maximo para a linha-taco
+        tam_max = 150
+        tam_min = -150
+        if (x_axis-self.bolao.pos[0]) > tam_max:
+            diferenca = (x_axis-self.bolao.pos[0])-tam_max
+            x_axis = x_axis - diferenca
+        elif (x_axis-self.bolao.pos[0] < tam_min):
+            diferenca = (x_axis-self.bolao.pos[0])-tam_min
+            x_axis = x_axis - diferenca
+        if (y_axis2-y_axis > tam_max):
+            diferenca = (y_axis2-y_axis)-tam_max
+            y_axis2 = y_axis2 - diferenca
+        elif (y_axis2-y_axis) < tam_min:
+            diferenca = (y_axis2-y_axis)-tam_min
+            y_axis2 = y_axis2 - diferenca
+
         if (self.clique == 1):
-            pygame.draw.line(window._screen, (255,255,255), (x_axis,y_axis2), (self.bolao.pos[0], y_axis))
+            pygame.draw.line(window._screen, (255,255,255), (self.bolao.pos[0], y_axis), (x_axis,y_axis2))
 
 # Inicia o jogo
 
