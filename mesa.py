@@ -126,14 +126,14 @@ class Mesa(World):
         direcao = coord_bola - coord_mouse
         direcao = direcao.normalize()
         
-        pos_ponta = coord_mouse - direcao*20
-        pos_base = pos_ponta + direcao*comprimento
+        pos_base = coord_mouse - direcao*20
+        pos_ponta = pos_base + direcao*comprimento
 
         
 
         if (self.clique == 1):
-            self.ponta.pos = (pos_base[0], -pos_base[1])
-            pygame.draw.line(window._screen, (255,255,255), pos_ponta, pos_base, 5)
+            self.ponta.pos = (pos_ponta[0], -pos_ponta[1])
+            pygame.draw.line(window._screen, (255,255,255), pos_base, pos_ponta, 5)
 
 # Inicia o jogo
 
