@@ -69,17 +69,16 @@ class Mesa(World):
 
         pos = (400,297.5)
         vel = (-150, 0)
-        self.bolao = Circle(radius=1.5*radius, vel=Vec2(0, 0), pos=pos, mass=2, col_layer=1)
+        self.bolao = Circle(radius=1.5*radius, vel=(0, 0), pos=pos, mass=2, col_layer=1)
         self.bolao.color = (255,255,255)
-        #self.bolao.vel = vel
         self.bolas.append(self.bolao)
         self.add(self.bolao)
 
-         #teste
 
+        # Define objeto que representa a ponta do taco
+        self.ponta = Circle(radius=2, vel=(0, 0), pos=(350,297.5), mass=2, col_layer=1)
+        self.add(self.ponta)
 
-        #pygame.draw.line((0,0,0), (0,400), (495,400), )
-       # self.add(linha)
 
     @listen('frame-enter')
     def bola_buraco(self):
@@ -120,7 +119,7 @@ class Mesa(World):
     
     @listen('post-draw')
     def draw_line (self, window):
-        comprimento = 150
+        comprimento = 200
         coord_mouse = Vec2( self.mouseX, 600 - self.mouseY )
         coord_bola = Vec2( self.bolao.pos[0], 600 - self.bolao.pos[1] )
 
@@ -133,7 +132,8 @@ class Mesa(World):
         
 
         if (self.clique == 1):
-            pygame.draw.line(window._screen, (255,255,255), pos_ponta, pos_base)
+            self.ponta.pos = (pos_base[0], -pos_base[1])
+            pygame.draw.line(window._screen, (255,255,255), pos_ponta, pos_base, 5)
 
 # Inicia o jogo
 
