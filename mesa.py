@@ -75,6 +75,7 @@ class Mesa(World):
         pos = (400,297.5)
         self.bolao = Circle(radius=1.5*radius, vel=(0, 0), pos=pos, mass=2, col_layer=[1,2])
         self.bolao.color = (255,255,255)
+        self.bolao.points = -1
         self.bolas.append(self.bolao)
         self.add(self.bolao)
 
@@ -142,6 +143,8 @@ class Mesa(World):
         direcao = direcao.normalize()
         
         pos_base = coord_mouse - direcao*20
+
+        pos_ant_ponta = (self.ponta.pos[0], 600 - self.ponta.pos[1])
         pos_ponta = pos_base + direcao*comprimento
 
         # taco só aparece com todas as bolas paradas
@@ -152,7 +155,9 @@ class Mesa(World):
 
         if (self.clique == 1 and todas_paradas == 0):
             self.ponta.pos = (pos_ponta[0], 600 - pos_ponta[1])
-            self.ponta.vel = (-300, 0)
+            self.ponta.vel = (direcao[0], - direcao[1])
+            self.ponta.vel *= (pos_ponta - pos_ant_ponta).norm()
+            print(self.ponta.vel)
 
             pygame.draw.line(window._screen, (255,255,255), pos_base, pos_ponta, 5)
         else:
