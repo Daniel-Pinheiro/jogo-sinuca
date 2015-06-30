@@ -10,7 +10,7 @@ import taco
 
 class Mesa(World):
 
-    def __init__(self, gravity=0, restitution=1, num_balls=15, radius=10):
+    def __init__(self, gravity=0, restitution=0.95, num_balls=15, radius=10):
 
         super(Mesa, self).__init__(gravity=gravity, restitution=restitution, background = (0, 0, 0))
 
@@ -76,7 +76,7 @@ class Mesa(World):
 
 
         # Define objeto que representa a ponta do taco
-        self.ponta = Circle(radius=2, vel=(0, 0), pos=(350,297.5), mass=2, col_layer=1)
+        self.ponta = Circle(radius=2, vel=(0, 0), pos=(0,0), mass=2, col_layer=1, color=(255,255,255))
         self.add(self.ponta)
 
 
@@ -95,13 +95,17 @@ class Mesa(World):
             elif b.xmax < 30:
                 b.pos = (400,400)
                 self.remove(b)
+            #Zera a velocidade da bola, quando esta se torna muito lenta
+            if b.vel[0] - 0 <= 15 and b.vel[0] - 0 >= -15  and b.vel[1] - 0 <= 15 and b.vel[1] - 0 >= -15:
+                b.vel = (0,0)
+
+            #viscosidade
+            b.boost(-0.005 * b.vel)
+            print (self.bolao.vel)
 
     @listen('key-down', 'space')
     def toggle_pause(self):
-        #super(Mesa, self).toggle_pause()  
-        #Para testes apenas. Aperte espaço para dar uma velocidade aleatória à todas as bolas na mesa.
-        for b in self.bolas:
-            b.vel = (uniform(-250,250), uniform(250,-250))
+        super(Mesa, self).toggle_pause()  
 
     @listen('mouse-motion')
     def move_mouse(self, pos):
@@ -129,11 +133,9 @@ class Mesa(World):
         pos_base = coord_mouse - direcao*20
         pos_ponta = pos_base + direcao*comprimento
 
-        
-
         if (self.clique == 1):
             self.ponta.pos = (pos_ponta[0], 600 - pos_ponta[1])
-            self.ponta.vel = (-200, 0)
+            self.ponta.vel = (-300, 0)
 
             pygame.draw.line(window._screen, (255,255,255), pos_base, pos_ponta, 5)
 
