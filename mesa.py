@@ -1,4 +1,6 @@
 # -*- coding: utf8 -*-
+
+
 import pygame
 from FGAme import *
 from random import uniform
@@ -73,10 +75,10 @@ class Mesa(World):
         self.bolas.append(self.bolao)
         self.add(self.bolao)
 
-        #teste
+         #teste
 
 
-       # pygame.draw.line((0,0,0), (0,400), (495,400))
+        #pygame.draw.line((0,0,0), (0,400), (495,400), )
        # self.add(linha)
 
     @listen('frame-enter')
@@ -109,6 +111,7 @@ class Mesa(World):
 
     @listen('mouse-button-down')
     def click_mouse (self, button, pos):
+        
         for b in self.bolas:
             if button == 'left'  and pos[0] > b.xmin and pos[0] < b.xmax and pos[1] > b.ymin and pos[1] < b.ymax:
                 self.clique = 1
@@ -117,28 +120,20 @@ class Mesa(World):
     
     @listen('post-draw')
     def draw_line (self, window):
-        y_axis = 600 - self.bolao.pos[1] #a pygame usa um sistema cartesiano com y invertido. Isso adapta ao nosso.
-        y_axis2 = 600 - self.mouseY #idem acima
-        x_axis = self.mouseX
+        comprimento = 150
+        coord_mouse = Vec2( self.mouseX, 600 - self.mouseY )
+        coord_bola = Vec2( self.bolao.pos[0], 600 - self.bolao.pos[1] )
 
-        #define tamanho maximo para a linha-taco
-        tam_max = 150
-        tam_min = -150
-        if (x_axis-self.bolao.pos[0]) > tam_max:
-            diferenca = (x_axis-self.bolao.pos[0])-tam_max
-            x_axis = x_axis - diferenca
-        elif (x_axis-self.bolao.pos[0] < tam_min):
-            diferenca = (x_axis-self.bolao.pos[0])-tam_min
-            x_axis = x_axis - diferenca
-        if (y_axis2-y_axis > tam_max):
-            diferenca = (y_axis2-y_axis)-tam_max
-            y_axis2 = y_axis2 - diferenca
-        elif (y_axis2-y_axis) < tam_min:
-            diferenca = (y_axis2-y_axis)-tam_min
-            y_axis2 = y_axis2 - diferenca
+        direcao = coord_bola - coord_mouse
+        direcao = direcao.normalize()
+        
+        pos_ponta = coord_mouse - direcao*20
+        pos_base = pos_ponta + direcao*comprimento
+
+        
 
         if (self.clique == 1):
-            pygame.draw.line(window._screen, (255,255,255), (self.bolao.pos[0], y_axis), (x_axis,y_axis2))
+            pygame.draw.line(window._screen, (255,255,255), pos_ponta, pos_base)
 
 # Inicia o jogo
 
