@@ -88,26 +88,17 @@ class Mesa(World):
     @listen('frame-enter')
     def bola_buraco(self):
         for b in self.bolas:
-            if b.ymin > 495:
-                b.pos = (400,400)
-                self.pontuation += b.points
-                self.remove(b)
+            if b.ymin > 495 or b.ymax < 100 or b.xmin > 770 or b.xmax < 30:
+                if b == self.bolao:
+                    b.pos = (400,297.5)
+                    b.vel = (0,0)
+                else:
+                    b.pos = (400,400)
+                    self.pontuation += b.points
+                    self.remove(b)
+
                 print(self.pontuation)
-            elif b.ymax < 100:
-                b.pos = (400,400)
-                self.pontuation += b.points
-                self.remove(b)
-                print(self.pontuation)
-            elif b.xmin > 770:
-                b.pos = (400,400)
-                self.pontuation += b.points
-                self.remove(b)
-                print(self.pontuation)
-            elif b.xmax < 30:
-                b.pos = (400,400)
-                self.pontuation += b.points
-                self.remove(b)
-                print(self.pontuation)
+
             #Zera a velocidade da bola, quando esta se torna muito lenta
             if b.vel[0] - 0 <= 15 and b.vel[0] - 0 >= -15  and b.vel[1] - 0 <= 15 and b.vel[1] - 0 >= -15:
                 b.vel = (0,0)
@@ -127,11 +118,10 @@ class Mesa(World):
     @listen('mouse-button-down')
     def click_mouse (self, button, pos):
         
-        for b in self.bolas:
-            if button == 'left':
-                self.clique = 1
-            elif button == 'left' and self.clique == 1:
-                self.clique = 0
+        if button == 'left':
+            self.clique = 1
+        elif button == 'left' and self.clique == 1:
+            self.clique = 0
     
     @listen('post-draw')
     def draw_line (self, window):
@@ -157,7 +147,6 @@ class Mesa(World):
             self.ponta.pos = (pos_ponta[0], 600 - pos_ponta[1])
             self.ponta.vel = (direcao[0], - direcao[1])
             self.ponta.vel *= (pos_ponta - pos_ant_ponta).norm()
-            print(self.ponta.vel)
 
             pygame.draw.line(window._screen, (255,255,255), pos_base, pos_ponta, 5)
         else:
