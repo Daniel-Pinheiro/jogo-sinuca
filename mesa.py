@@ -1,10 +1,10 @@
 # -*- coding: utf8 -*-
+import pygame
 from FGAme import *
-from random import uniform, randint
+from random import uniform
 import taco
 
 # Inicializa o mundo
-
 
 class Mesa(World):
 
@@ -12,11 +12,16 @@ class Mesa(World):
 
         super(Mesa, self).__init__(gravity=gravity, restitution=restitution, background = (0, 0, 0))
 
+        # Variáveis funcionais
+        self.clique = 0
+        self.mouseX = 0
+        self.mouseY = 0
+
         # Mesa (tamanho: 740 x 395)
         #   xi, xf, yi, yf 
         raio_buraco = 25
 
-        table = AABB(30, 770, 100, 495, world=self, mass='inf', color=(0,146,64))
+        self.table = AABB(30, 770, 100, 495, world=self, mass='inf', color=(0,146,64))
         AABB((30+raio_buraco), (400-raio_buraco), 495, 800, world=self, mass='inf', col_layer=1)  # Cima - Esquerda
         AABB((400+raio_buraco), (770-raio_buraco), 495, 800, world=self, mass='inf', col_layer=1) # Cima - Direita
         AABB(0, 30, (100+raio_buraco), (495-raio_buraco), world=self, mass='inf', col_layer=1)   # Esquerda
@@ -62,11 +67,17 @@ class Mesa(World):
 
         pos = (400,297.5)
         vel = (-150, 0)
-        bolao = Circle(radius=1.5*radius, vel=Vec2(0, 0), pos=pos, mass=2, col_layer=1)
-        bolao.color = (255,255,255)
-        bolao.vel = vel
-        self.bolas.append(bolao)
-        self.add(bolao)
+        self.bolao = Circle(radius=1.5*radius, vel=Vec2(0, 0), pos=pos, mass=2, col_layer=1)
+        self.bolao.color = (255,255,255)
+        #self.bolao.vel = vel
+        self.bolas.append(self.bolao)
+        self.add(self.bolao)
+
+        #teste
+
+
+       # pygame.draw.line((0,0,0), (0,400), (495,400))
+       # self.add(linha)
 
     @listen('frame-enter')
     def bola_buraco(self):
@@ -84,7 +95,6 @@ class Mesa(World):
                 b.pos = (400,400)
                 self.remove(b)
 
-
     @listen('key-down', 'space')
     def toggle_pause(self):
         #super(Mesa, self).toggle_pause()  
@@ -92,8 +102,30 @@ class Mesa(World):
         for b in self.bolas:
             b.vel = (uniform(-250,250), uniform(250,-250))
 
+    @listen('mouse-motion')
+    def move_mouse(self, pos):
+        self.mouseX = pos[0]
+        self.mouseY = pos[1]
+
+    @listen('mouse-button-down')
+    def click_mouse (self, button, pos):
+        for b in self.bolas:
+            if button == 'left'  and pos[0] > b.xmin and pos[0] < b.xmax and pos[1] > b.ymin and pos[1] < b.ymax:
+                self.clique = 1
+            elif button == 'left' and self.clique == 1:
+                self.clique = 0
+    
+    @listen('post-draw')
+    def draw_line (self, window):
+        y_axis = 600 - self.bolao.pos[1] #a pygame usa um sistema cartesiano com y invertido. Isso adapta ao nosso.
+        y_axis2 = 600 - self.mouseY #idem acima
+        x_axis = self.mouseX
+        if (self.clique == 1):
+            pygame.draw.line(window._screen, (255,255,255), (x_axis,y_axis2), (self.bolao.pos[0], y_axis))
+
 # Inicia o jogo
 
 if __name__ == '__main__':
     w = Mesa()
     w.run()
+
