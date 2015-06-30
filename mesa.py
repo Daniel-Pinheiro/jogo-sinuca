@@ -18,6 +18,7 @@ class Mesa(World):
         self.clique = 0
         self.mouseX = 0
         self.mouseY = 0
+        self.pontuation = 0
 
         # Mesa (tamanho: 740 x 395)
         #   xi, xf, yi, yf 
@@ -56,27 +57,30 @@ class Mesa(World):
         # Na ordem: amarela, azul, vermelha, violeta, rosa, verde, bege, preta, 
         #           amarela, azul, vermelha, verde, rosa, violeta, bege
         
+        # Vetor de pontos das bolas
+
+        pontos_bolas = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0]
         #Cria as bolas e as associa com as posições e as cores:
         self.bolas = []
         for x in range (num_balls):
             bola = Circle(radius=radius, mass=1, col_layer=1)
             bola.pos = pos_bolas[x]
             bola.color = cor_bolas[x]
+            bola.points = pontos_bolas[x]
             self.bolas.append(bola)
             self.add(bola)
 
         # Define bola branca
 
         pos = (400,297.5)
-        vel = (-150, 0)
-        self.bolao = Circle(radius=1.5*radius, vel=(0, 0), pos=pos, mass=2, col_layer=1)
+        self.bolao = Circle(radius=1.5*radius, vel=(0, 0), pos=pos, mass=2, col_layer=[1,2])
         self.bolao.color = (255,255,255)
         self.bolas.append(self.bolao)
         self.add(self.bolao)
 
 
         # Define objeto que representa a ponta do taco
-        self.ponta = Circle(radius=2, vel=(0, 0), pos=(0,0), mass=2, col_layer=1, color=(255,255,255))
+        self.ponta = Circle(radius=2, vel=(0, 0), pos=(0,0), mass=2, col_layer=2, color=(255,255,255))
         self.add(self.ponta)
 
 
@@ -85,23 +89,30 @@ class Mesa(World):
         for b in self.bolas:
             if b.ymin > 495:
                 b.pos = (400,400)
+                self.pontuation += b.points
                 self.remove(b)
+                print(self.pontuation)
             elif b.ymax < 100:
                 b.pos = (400,400)
+                self.pontuation += b.points
                 self.remove(b)
+                print(self.pontuation)
             elif b.xmin > 770:
                 b.pos = (400,400)
+                self.pontuation += b.points
                 self.remove(b)
+                print(self.pontuation)
             elif b.xmax < 30:
                 b.pos = (400,400)
+                self.pontuation += b.points
                 self.remove(b)
+                print(self.pontuation)
             #Zera a velocidade da bola, quando esta se torna muito lenta
             if b.vel[0] - 0 <= 15 and b.vel[0] - 0 >= -15  and b.vel[1] - 0 <= 15 and b.vel[1] - 0 >= -15:
                 b.vel = (0,0)
 
             #viscosidade
             b.boost(-0.005 * b.vel)
-            print (self.bolao.vel)
 
     @listen('key-down', 'space')
     def toggle_pause(self):
@@ -133,11 +144,20 @@ class Mesa(World):
         pos_base = coord_mouse - direcao*20
         pos_ponta = pos_base + direcao*comprimento
 
-        if (self.clique == 1):
+        # taco só aparece com todas as bolas paradas
+        todas_paradas = 0
+        for b in self.bolas:
+            if b.vel != (0,0):
+                todas_paradas += 1
+
+        if (self.clique == 1 and todas_paradas == 0):
             self.ponta.pos = (pos_ponta[0], 600 - pos_ponta[1])
             self.ponta.vel = (-300, 0)
 
             pygame.draw.line(window._screen, (255,255,255), pos_base, pos_ponta, 5)
+        else:
+            self.ponta.pos = (0,0)
+            self.ponta.vel = (0,0)
 
 # Inicia o jogo
 
