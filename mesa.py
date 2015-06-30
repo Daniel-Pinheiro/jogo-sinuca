@@ -112,10 +112,10 @@ class Mesa(World):
     def click_mouse (self, button, pos):
         
         for b in self.bolas:
-            if button == 'left'  and pos[0] > b.xmin and pos[0] < b.xmax and pos[1] > b.ymin and pos[1] < b.ymax:
-                self.clique = 1
-            elif button == 'left' and self.clique == 1:
+            if button == 'left' and self.clique == 1:
                 self.clique = 0
+            elif button == 'left' :
+                self.clique = 1
     
     @listen('post-draw')
     def draw_line (self, window):
