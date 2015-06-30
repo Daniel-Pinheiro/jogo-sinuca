@@ -76,7 +76,7 @@ class Mesa(World):
 
 
         # Define objeto que representa a ponta do taco
-        self.ponta = Circle(radius=2, vel=(0, 0), pos=(350,297.5), mass=2, col_layer=1)
+        self.ponta = Circle(radius=20, vel=(0, 0), pos=(350,297.5), mass=2, col_layer=1)
         self.add(self.ponta)
 
 
@@ -112,10 +112,10 @@ class Mesa(World):
     def click_mouse (self, button, pos):
         
         for b in self.bolas:
-            if button == 'left' and self.clique == 1:
-                self.clique = 0
-            elif button == 'left' :
+            if button == 'left':
                 self.clique = 1
+            elif button == 'left' and self.clique == 1:
+                self.clique = 0
     
     @listen('post-draw')
     def draw_line (self, window):
@@ -133,6 +133,8 @@ class Mesa(World):
 
         if (self.clique == 1):
             self.ponta.pos = (pos_ponta[0], -pos_ponta[1])
+            self.ponta.vel = (direcao[0],-direcao[1])
+
             pygame.draw.line(window._screen, (255,255,255), pos_base, pos_ponta, 5)
 
 # Inicia o jogo
